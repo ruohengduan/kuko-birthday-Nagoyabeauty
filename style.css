@@ -1,11 +1,11 @@
 /* 告訴網頁去讀取你 fonts 資料夾裡的毛筆字體 */
 @font-face {
-    font-family: 'MyCalligraphy';
-    src: url('素材/fonts/衡山毛筆字體.ttf') format('truetype');
+    font-family: 'MyCustomFont'; /* 這是你自訂的字體名稱 */
+    src: url('衡山毛筆字體.ttf') format('truetype');
 }
 
 body {
-    background-image: url('素材/背景圖/paper.jpg'); 
+    background-image: url('paper.jpg'); 
     background-size: cover;        
     background-position: center;   
     background-attachment: fixed;  
