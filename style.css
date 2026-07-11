@@ -1,364 +1,64 @@
-/* 告訴網頁去讀取你 fonts 資料夾裡的毛筆字體 */
+/* 1. 字體與基礎設定 */
 @font-face {
-    font-family: 'MyCalligraphy'; /* 改成跟其他地方一樣的名字 */
+    font-family: 'MyCalligraphy';
     src: url('衡山毛筆字體.ttf') format('truetype');
 }
 
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'MyCalligraphy', serif; }
+
 body {
-    background-image: url('paper.jpg'); 
-    background-size: cover;        
-    background-position: center;   
-    background-attachment: fixed;  
-    background-color: #f4eae1;     
-    
-    margin: 0;
-    height: 100vh;
+    background-image: url('paper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow-x: hidden; /* 防止內容過寬出現橫向捲軸 */
+}
+
+/* 2. 容器與圖片響應式處理 */
+.container { 
+    width: 90%; 
+    max-width: 600px; 
+    text-align: center; 
+    color: #2c1a3d;
     position: relative;
-    user-select: none;
-}
-
-/* ==========================================
-   【核心震撼開場】爆誕！！！！彈出式特殊圖層
-   ========================================== */
-/* ==========================================
-   【新增】配合 JS：點擊前先隱藏所有動畫元件，點擊後才啟動
-   ========================================== */
-body.preload .epic-explosion,
-body.preload .date-text,
-body.preload .top-logo,
-body.preload h1,
-body.preload .subtitle,
-body.preload .stamp-right-bottom {
-    animation: none !important;
-    opacity: 0 !important;
-}
-
-/* 爆誕文字預設樣式 */
-.epic-explosion {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(5);
-    font-family: 'MyCalligraphy', serif;
-    color: #9400D3; 
-    font-size: 12rem; 
-    font-weight: bold;
-    letter-spacing: 15px;
-    white-space: nowrap;
-    z-index: 99999; 
-    pointer-events: none;
-    opacity: 0; 
-    text-shadow: 
-        5px 5px 0px #2b1142,
-        0 0 40px rgba(148, 0, 211, 0.8),
-        0 0 80px rgba(75, 0, 130, 1);
-}
-
-/* 當被點擊解鎖後，JS 會加上 .active，這時才狂暴觸發動畫 */
-.epic-explosion.active {
-    animation: blastImpact 2s cubic-bezier(0.15, 0.85, 0.3, 1) forwards;
-}
-
-@keyframes blastImpact {
-    0% {
-        transform: translate(-50%, -50%) scale(5); 
-        opacity: 0;
-        filter: blur(20px);
-    }
-    12% {
-        transform: translate(-50%, -50%) scale(0.95); 
-        opacity: 1;
-        filter: blur(0);
-    }
-    14% { transform: translate(-48%, -52%) scale(1.05); } 
-    16% { transform: translate(-52%, -48%) scale(1); }    
-    18% { transform: translate(-50%, -50%) scale(1); }    
-    70% {
-        transform: translate(-50%, -50%) scale(1.05); 
-        opacity: 1;
-        filter: blur(0);
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(2.5); 
-        opacity: 0;
-        filter: blur(15px);
-    }
-}
-
-/* ==========================================
-   1. 祥雲2：守住左上、右上、下方（維持大四倍）
-   ========================================== */
-.cloud-float {
-    position: absolute;
-    width: 600px; 
-    opacity: 0.65; 
-    z-index: 3;
-    pointer-events: none;
-    animation: floatingCloud 5s ease-in-out infinite alternate;
-}
-.c1 { top: 5%; left: 2%; animation-duration: 4s; }
-.c2 { top: 2%; left: 30%; animation-duration: 5.5s; animation-delay: 0.5s; }
-.c3 { bottom: 2%; left: 25%; animation-duration: 5s; animation-delay: 1s; }
-.c4 { bottom: 12%; right: 5%; animation-duration: 6s; animation-delay: 0.2s; }
-
-@keyframes floatingCloud {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-25px) rotate(1deg); } 
-}
-
-/* ==========================================
-   2. 彼岸花：在文字底下
-   ========================================== */
-.flower-bg-layer {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 4; 
-    pointer-events: none;
-}
-.center-flower { width: 550px; opacity: 0.45; }
-
-/* ==========================================
-   3. 左右兩側直寫日期（等爆誕結束後，2秒時開跑）
-   ========================================== */
-.date-text {
-    position: absolute;
-    font-family: 'MyCalligraphy', serif;
-    color: #2b1142; 
-    font-size: 4.2rem; 
-    writing-mode: vertical-rl; 
-    white-space: nowrap; 
-    letter-spacing: 10px; 
-    z-index: 8; 
-    top: 50%;
-    transform: translateY(-50%);
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-    opacity: 0;
-    
-    /* 延遲時間全部順延 2 秒（2s） */
-    animation: vBrushSwipe 1.5s cubic-bezier(0.4, 0, 0.2, 1) 2s forwards;
-}
-.date-left { left: 6%; }
-.date-right { right: 6%; }
-
-@keyframes vBrushSwipe {
-    0% { clip-path: inset(0 0 100% 0); opacity: 0; filter: blur(5px); }
-    10% { opacity: 1; }
-    100% { clip-path: inset(0 0 0 0); opacity: 1; filter: blur(0); }
-}
-
-/* ==========================================
-   4. 主視覺中心區域（文字與Logo）
-   ========================================== */
-.container {
-    text-align: center;
-    position: relative;
-    z-index: 10; 
     padding: 20px;
 }
 
-.top-logo {
-    width: 110px; 
-    margin-bottom: 10px;
-    display: inline-block;
-    opacity: 0;
-    /* 順延到 3.5 秒時與名字一同浮現 */
-    animation: fadeInLogo 1s ease forwards 3.5s;
-}
-@keyframes fadeInLogo {
-    to { opacity: 1; }
-}
-
-h1 {
-    font-family: 'MyCalligraphy', serif; 
-    color: #2b1142; 
-    font-size: 5.5rem; 
-    margin: 0;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.15), 0 0 25px rgba(148, 0, 211, 0.6);
-    letter-spacing: 6px;
+/* 讓所有放進去的裝飾圖(彼岸花、祥雲)自動縮放，不會爆版 */
+.container img {
+    max-width: 100%;
+    height: auto;
     display: block;
-    opacity: 0;
-    
-    /* 順延時間到 3.5 秒（日期跑完才換它） */
-    animation: brushSwipe 2s cubic-bezier(0.4, 0, 0.2, 1) 3.5s forwards;
+    margin: 10px auto;
 }
 
-.subtitle {
-    font-family: 'MyCalligraphy', serif; 
-    color: #4a2e2b; 
-    font-size: 2.5rem; 
-    margin-top: 15px;
-    letter-spacing: 4px;
-    display: block;
-    opacity: 0;
-    
-    /* 順延時間到 5.5 秒播放 */
-    animation: brushSwipe 1.5s cubic-bezier(0.4, 0, 0.2, 1) 5.5s forwards;
-}
+.top-logo { width: 120px; }
 
-@keyframes brushSwipe {
-    0% { clip-path: inset(0 100% 0 0); opacity: 0; filter: blur(8px); }
-    10% { opacity: 1; }
-    100% { clip-path: inset(0 0 0 0); opacity: 1; filter: blur(0); }
-}
-
-/* ==========================================
-   5. 空嚴寺章：最後霸氣壓軸（6.5秒時砸下來）
-   ========================================== */
-.stamp-right-bottom {
-    position: absolute;
-    bottom: 60px;  
-    right: 45px;   
-    width: 160px;  
-    opacity: 0;
-    z-index: 12;   
-    pointer-events: none;
-    transform: rotate(3deg); 
-    /* 順延到 6.5 秒重重砸下用印 */
-    animation: stampDrop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 6.5s forwards;
-}
-@keyframes stampDrop {
-    0% { transform: rotate(15deg) scale(2); opacity: 0; }
-    100% { transform: rotate(3deg) scale(1); opacity: 0.95; } 
-}
-
-/* ==========================================
-   紫色火焰粒子樣式（點擊特效）
-   ========================================== */
-.fire-particle {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    background: #ffffff;
-    box-shadow: 
-        0 0 10px #fff, 
-        0 -4px 15px #bd5eff, 
-        0 -8px 25px #9400D3, 
-        0 -12px 35px #4b0082;
-    filter: blur(1px);
-    animation: burnUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes burnUp {
-    0% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { transform: translate(calc(-50% + var(--vx)), calc(-50% + var(--vy) - 150px)) scale(0.1); opacity: 0; }
-}
-/* ==========================================
-   【新增】開眼動畫視覺效果
-   ========================================== */
-
-/* 點擊解鎖提示層（原本是白底，我們把它改成半透明黑底，更有神秘感） */
-#audio-unlocker {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 999999;
-    background: rgba(0, 0, 0, 0.85); /* 半透明黑底 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: opacity 0.5s ease; /* 點擊後緩慢淡出 */
-}
-
-/* 提示文字美化 */
-.unlock-prompt {
-    color: #9400D3; 
-    font-family: 'MyCalligraphy', serif; 
-    font-size: 2.5rem; 
-    background: rgba(255, 255, 255, 0.9); 
-    padding: 15px 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 0 30px rgba(148, 0, 211, 0.5); 
-    animation: promptPulse 1s infinite alternate;
-    margin-top: 20px;
-}
-@keyframes promptPulse { from { opacity: 0.6; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-/* ==========================================
-   【純 CSS 電影級睜眼開場】無須任何圖片！
-   ========================================== */
-
-#audio-unlocker {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 999999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-/* 提示文字（一開始浮在黑幕正中間） */
-.unlock-prompt {
-    color: #9400D3; 
-    font-family: 'MyCalligraphy', serif; 
-    font-size: 2.5rem; 
-    background: rgba(255, 255, 255, 0.9); 
-    padding: 15px 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 0 30px rgba(148, 0, 211, 0.5); 
-    animation: promptPulse 1s infinite alternate;
-    z-index: 1000001; /* 確保在眼皮最上方 */
-    transition: opacity 0.3s ease;
-}
-@keyframes promptPulse { from { opacity: 0.6; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-
-/* 上下眼皮黑幕 */
-.eyelid {
-    position: absolute;
-    left: 0;
-    width: 100vw;
-    height: 50vh; /* 各佔螢幕一半，剛好閉合 */
-    background: #0d0614; /* 充滿邪惡感的深紫黑 */
-    z-index: 1000000;
-}
+/* 3. 特效區塊 (開眼) */
+.eyelid { position: fixed; left: 0; width: 100%; height: 50%; background: #000; z-index: 999; transition: 1s; }
 .top-eyelid { top: 0; }
 .bottom-eyelid { bottom: 0; }
+.unlocked .top-eyelid { top: -50%; }
+.unlocked .bottom-eyelid { bottom: -50%; }
+.unlock-prompt { position: fixed; z-index: 1000; color: white; font-size: 1.5rem; cursor: pointer; }
 
-/* 當點擊後，JS 給 #audio-unlocker 加上 .active，觸發睜眼 */
-#audio-unlocker.active .unlock-prompt {
-    opacity: 0; /* 提示字瞬間消失 */
-    pointer-events: none;
+/* 4. 針對文字的響應式尺寸 */
+h1 { font-size: 3.5rem; }
+.subtitle { font-size: 1.8rem; }
+
+@media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    .subtitle { font-size: 1rem; }
+    .top-logo { width: 80px; }
 }
 
-#audio-unlocker.active .top-eyelid {
-    animation: splitTopEye 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+/* 5. 爆誕特效 */
+.epic-explosion {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 4rem; color: red; opacity: 0; pointer-events: none; transition: 0.5s;
 }
-
-#audio-unlocker.active .bottom-eyelid {
-    animation: splitBottomEye 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-/* 上眼皮往上抽走，模擬睜眼 */
-@keyframes splitTopEye {
-    0% { transform: translateY(0); }
-    15% { transform: translateY(-5vh); } /* 先微微眨一下 */
-    30% { transform: translateY(0); }
-    100% { transform: translateY(-100%); } /* 完全掀開 */
-}
-
-/* 下眼皮往下抽走，模擬睜眼 */
-@keyframes splitBottomEye {
-    0% { transform: translateY(0); }
-    15% { transform: translateY(5vh); }  /* 先微微眨一下 */
-    30% { transform: translateY(0); }
-    100% { transform: translateY(100%); }  /* 完全掀開 */
-}
-/* 測試用代碼 */
-.top-eyelid { background: rgba(89, 0, 255, 0.966) !important; }
-.bottom-eyelid { background: rgba(98, 0, 255, 0.904) !important; }
+.active-explosion { opacity: 1; transform: translate(-50%, -50%) scale(1); }
