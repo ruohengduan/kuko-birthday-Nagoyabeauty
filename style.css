@@ -1,11 +1,9 @@
-/* 1. 字體與基礎設定 */
+/* 1. 字體與基礎設定 (不變) */
 @font-face {
     font-family: 'MyCalligraphy';
     src: url('衡山毛筆字體.ttf') format('truetype');
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'MyCalligraphy', serif; }
-
 body {
     background-image: url('paper.jpg');
     background-size: cover;
@@ -15,10 +13,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden; /* 防止內容過寬出現橫向捲軸 */
+    overflow-x: hidden;
 }
 
-/* 2. 容器與圖片響應式處理 */
+/* 2. 容器設定 (微調) */
 .container { 
     width: 90%; 
     max-width: 600px; 
@@ -26,19 +24,35 @@ body {
     color: #2c1a3d;
     position: relative;
     padding: 20px;
+    z-index: 1; /* 確保內容在背景紙之上 */
 }
 
-/* 讓所有放進去的裝飾圖(彼岸花、祥雲)自動縮放，不會爆版 */
+/* 針對一般圖片的響應式處理 (不變) */
 .container img {
     max-width: 100%;
     height: auto;
     display: block;
     margin: 10px auto;
 }
-
 .top-logo { width: 120px; }
 
-/* 3. 特效區塊 (開眼) */
+/* === 重點修正：祥雲專屬設定 === */
+.cloud-container {
+    width: 100%;
+    height: 100px; /* 給祥雲一個固定的顯示高度，避免被壓扁 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+.cloud-img {
+    max-height: 100%; /* 限制圖片高度不超過容器 */
+    width: auto !important; /* 強制寬度自動，維持比例 */
+    object-fit: contain;
+}
+/* =========================== */
+
+/* 3. 開眼特效 (不變) */
 .eyelid { position: fixed; left: 0; width: 100%; height: 50%; background: #000; z-index: 999; transition: 1s; }
 .top-eyelid { top: 0; }
 .bottom-eyelid { bottom: 0; }
@@ -46,19 +60,28 @@ body {
 .unlocked .bottom-eyelid { bottom: -50%; }
 .unlock-prompt { position: fixed; z-index: 1000; color: white; font-size: 1.5rem; cursor: pointer; }
 
-/* 4. 針對文字的響應式尺寸 */
+/* 4. 文字響應式 (不變) */
 h1 { font-size: 3.5rem; }
 .subtitle { font-size: 1.8rem; }
-
 @media (max-width: 600px) {
     h1 { font-size: 2rem; }
     .subtitle { font-size: 1rem; }
     .top-logo { width: 80px; }
+    /* 手機版稍微縮小祥雲容器高度 */
+    .cloud-container { height: 80px; }
 }
 
-/* 5. 爆誕特效 */
+/* === 重點修正：爆誕文字設定 === */
 .epic-explosion {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 4rem; color: red; opacity: 0; pointer-events: none; transition: 0.5s;
+    font-size: 6rem; /* 電腦版超大字 */
+    color: red; opacity: 0; pointer-events: none; transition: 0.5s ease-out;
+    z-index: 2000; /* 確保它蓋在眼皮上面 */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* 加點陰影讓字更跳 */
 }
-.active-explosion { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+/* 手機版爆誕文字大小 (避免爆框) */
+@media (max-width: 600px) {
+    .epic-explosion { font-size: 3.5rem; }
+}
+/* 這是 JS 觸發時要加上的 class */
+.active-explosion { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
