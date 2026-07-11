@@ -1,6 +1,6 @@
 /* 告訴網頁去讀取你 fonts 資料夾裡的毛筆字體 */
 @font-face {
-    font-family: 'MyCustomFont'; /* 這是你自訂的字體名稱 */
+    font-family: 'MyCalligraphy'; /* 改成跟其他地方一樣的名字 */
     src: url('衡山毛筆字體.ttf') format('truetype');
 }
 
