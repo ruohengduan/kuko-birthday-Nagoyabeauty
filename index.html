@@ -3,32 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>波羅夷 空却 HBD</title>
     <link rel="stylesheet" href="style.css">
-    <!-- 如果你有 audio.mp3，請確保它在根目錄，script.js 會控制它 -->
+    <title>波羅夷 空却 HBD</title>
 </head>
 <body>
-    
-    <!-- 開眼特效與音效觸發層 -->
+    <!-- 這裡的 id="audio-unlocker" 必須對應 JS 第 5 行 -->
     <div id="audio-unlocker">
         <div class="eyelid top-eyelid"></div>
         <div class="eyelid bottom-eyelid"></div>
         <div class="unlock-prompt">點擊螢幕 爆誕開眼！</div>
     </div>
 
-    <!-- 主要內容區域 -->
     <div class="container">
-        <img src="蓮花logo.png" class="top-logo" alt="蓮花logo">
-        <!-- 祥雲圖片：CSS 會控制手機版縮小到四分之一 -->
-        <img src="祥雲.png" class="cloud-img" alt="祥雲">
+        <img src="蓮花logo.png" class="logo" alt="logo">
+        <img src="祥雲2.png" class="cloud2" alt="祥雲2">
         <h1>波羅夷 空却</h1>
         <p class="subtitle">お誕生日おめでとう！</p>
     </div>
 
-    <!-- 爆誕文字特效 (隱藏，由 JS 觸發顯示) -->
-    <div id="blast-text" class="epic-explosion">爆誕！！！！</div>
+    <!-- 這裡的 id="blast-text" 必須對應 JS 第 6 行 -->
+    <div id="blast-text">爆誕！！！！</div>
 
-    <!-- 你的 JavaScript 檔案，負責控制音效、開眼與爆誕動畫 -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,113 +1,40 @@
-/* 1. 字體定義 (確保檔名正確) */
-@font-face {
-    font-family: 'MyCalligraphy';
-    src: url('衡山毛筆字體.ttf') format('truetype');
+@font-face { font-family: 'MyCalligraphy'; src: url('衡山毛筆字體.ttf'); }
+* { font-family: 'MyCalligraphy', serif; box-sizing: border-box; }
+
+body { 
+    background: url('paper.jpg') center/cover fixed; 
+    margin: 0; min-height: 100vh; display: flex; 
+    justify-content: center; align-items: center; overflow-x: hidden;
 }
 
-/* 2. 全域設定：強制套用字體 */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'MyCalligraphy', serif !important; 
-}
+.container { text-align: center; color: #4b0082; }
 
-body {
-    background-image: url('paper.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow-x: hidden; /* 防止橫向捲軸 */
-    cursor: pointer; /* 提示用戶可點擊 */
-}
-
-/* 3. 內容容器設定 (響應式基礎) */
-.container { 
-    width: 90%; 
-    max-width: 600px; /* 限制電腦版最大寬度 */
-    text-align: center; 
-    color: #2c1a3d; 
-    z-index: 1; /* 確保內容在背景紙之上 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* 圖片通用設定 */
-.container img {
-    display: block;
-    height: auto;
-}
-
-.top-logo { 
-    width: 150px; /* 電腦版 Logo 大小 */
-    margin-bottom: 15px;
-}
-
-/* === 重點修改：祥雲響應式設定 === */
-.cloud-img { 
-    width: 200px; /* 電腦版祥雲大小 */
-    margin-bottom: 25px;
-    /* 這是為了讓縮放動作平滑 */
-    transition: width 0.3s ease; 
-}
-
-/* 文字排版設定 */
-h1 { font-size: 4rem; margin-bottom: 10px; }
-.subtitle { font-size: 2rem; }
-
-/* 4. 手機版媒體查詢 (螢幕寬度小於 600px) */
+/* 響應式：手機版縮小祥雲 */
 @media (max-width: 600px) {
+    .logo { width: 100px; }
+    .cloud2 { width: 100px !important; } /* 強制四分之一 */
     h1 { font-size: 2.5rem; }
-    .subtitle { font-size: 1.2rem; }
-    .top-logo { width: 100px; }
-    
-    /* === 重點修改：手機版祥雲強制縮小為原本的四分之一 === */
-    .cloud-img { 
-        /* 原本是 200px，這裡設定為 50px (即 200px * 0.25) */
-        width: 50px !important; 
-        margin-bottom: 15px;
-    }
 }
 
-/* 5. 開眼特效樣式 (保持不變) */
-.eyelid { 
-    position: fixed; left: 0; width: 100%; height: 50%; 
-    background: #000; z-index: 999; 
-    transition: transform 1s ease-in-out; 
-}
-.top-eyelid { top: 0; transform: translateY(0); }
-.bottom-eyelid { bottom: 0; transform: translateY(0); }
+/* 電腦版大小 */
+.logo { width: 200px; }
+.cloud2 { width: 400px; }
+h1 { font-size: 5rem; }
 
-/* JS 點擊後會給 body 加上 .unlocked class */
-body.unlocked .top-eyelid { transform: translateY(-100%); }
-body.unlocked .bottom-eyelid { transform: translateY(100%); }
+/* --- 核心特效 --- */
+#audio-unlocker { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 999; }
+.eyelid { position: absolute; width: 100%; height: 50%; background: black; transition: 1s; }
+.top-eyelid { top: 0; }
+.bottom-eyelid { bottom: 0; }
 
-.unlock-prompt { 
-    position: fixed; top: 50%; left: 50%; 
-    transform: translate(-50%, -50%);
-    z-index: 1000; color: white; 
-    font-size: 2rem; pointer-events: none; 
-    /* 點擊後淡出 */
-    transition: opacity 0.5s; 
-}
-body.unlocked .unlock-prompt { opacity: 0; }
+/* 當 JS 加上 'active' 時觸發開眼 */
+#audio-unlocker.active .top-eyelid { top: -50%; }
+#audio-unlocker.active .bottom-eyelid { bottom: -50%; }
 
-/* 6. 爆誕文字特效 (保持不變) */
-.epic-explosion {
-    position: fixed; top: 50%; left: 50%; 
-    transform: translate(-50%, -50%) scale(0.5);
-    font-size: 6rem; color: red; opacity: 0; 
-    pointer-events: none; z-index: 2000;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    transition: opacity 0.5s, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-/* JS 觸發時加入此 class */
-.epic-explosion.active-explosion { 
-    opacity: 1; 
-    transform: translate(-50%, -50%) scale(1);
-}
+/* 當 JS 加上 'active' 時觸發爆誕文字 */
+#blast-text { position: fixed; color: red; font-size: 5rem; opacity: 0; transition: 1s; pointer-events: none; }
+#blast-text.active { opacity: 1; transform: scale(1.5); }
+
+/* 紫色火焰特效粒子 (確保 CSS 存在) */
+.fire-particle { position: fixed; background: purple; width: 10px; height: 10px; border-radius: 50%; animation: fireAnim 1s forwards; }
+@keyframes fireAnim { to { transform: translate(var(--vx), var(--vy)); opacity: 0; } }
