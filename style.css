@@ -1,20 +1,260 @@
+/* 宣告字體 */
+@font-face {
+    font-family: 'MyCustomFont';
+    src: url('衡山毛筆字體.ttf') format('truetype');
+}
+
+/* 套用字體 */
+body, h1, p, div {
+    font-family: 'MyCustomFont', sans-serif;
+}
+
+/* 基礎設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 強制背景鋪滿且固定 */
+body {
+    width: 100vw;
+    height: 100vh;
+    background-image: url('paper.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow: hidden;
+}
+
+/* 確保容器也鋪滿 */
+.container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+}/* 文字置中排版 */
+.center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+/* 文字樣式 */
+.fade-in-text {
+    font-size: 4rem; 
+    color: #333;
+    opacity: 0; 
+    animation: slideRight 1.5s ease-out forwards;
+}
+
+.sub-title {
+    font-size: 2rem;
+    color: #555;
+    animation-delay: 0.5s; 
+}
+
+/* 左至右出現動畫 */
+@keyframes slideRight {
+    0% {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 /* 開眼遮罩層 */
-#audio-unlocker { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    z-index: 9999; background: transparent;
+#audio-unlocker {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 9999; background: transparent; pointer-events: auto;
 }
-.eyelid { 
-    position: absolute; width: 100%; height: 50%; background: black; 
-    transition: 1s ease-in-out; 
+.eyelid {
+    position: absolute; width: 100%; height: 50%; background: black;
+    transition: 1s ease-in-out;
 }
-.top-eyelid { top: 0; } 
+.top-eyelid { top: 0; }
 .bottom-eyelid { bottom: 0; }
 
-/* 點擊後開眼 */
+/* 點擊後開眼狀態 */
 #audio-unlocker.unlocked .top-eyelid { top: -50%; }
 #audio-unlocker.unlocked .bottom-eyelid { bottom: -50%; }
 
-.unlock-prompt { 
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+.unlock-prompt {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     color: white; font-size: 2rem; cursor: pointer; z-index: 10000;
+}
+.fire-particle {
+    position: absolute;
+    background: purple;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fadeOut 0.8s forwards;
+}
+@keyframes fadeOut {
+    to { transform: translate(var(--vx), var(--vy)); opacity: 0; }
+}/* 文字置中排版 */
+.center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+/* 文字樣式 */
+.fade-in-text {
+    font-size: 4rem; /* 你可以調整大小 */
+    color: #333;
+    opacity: 0; /* 初始隱藏 */
+    animation: slideRight 1.5s ease-out forwards;
+}
+
+.sub-title {
+    font-size: 2rem;
+    color: #555;
+    animation-delay: 0.5s; /* 副標題延遲出現 */
+}
+
+/* 文字置中排版 */
+.center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    z-index: 2;
+}
+
+/* 文字樣式：放大後的效果 */
+.fade-in-text {
+    font-size: 8rem;
+    color: #333;
+    opacity: 0;
+    animation: slideRight 2s ease-out forwards;
+}
+
+.sub-title {
+    font-size: 5rem;
+    color: #555;
+    animation-delay: 0.5s;
+}
+
+/* 左側：令和八年 */
+.left-date {
+    position: absolute !important;
+    top: 50% !important;        /* 先將頂端對齊到 50% */
+    left: 5% !important;
+    transform: translateY(-50%) !important; /* 關鍵：向上平移自身高度的一半，實現絕對居中 */
+    writing-mode: vertical-rl !important;
+    text-orientation: upright !important;
+    font-size: 5rem !important;
+    color: #333 !important;
+    z-index: 999 !important;
+    white-space: nowrap !important;
+}
+
+/* 右側：八月二十一日 */
+.right-date {
+    position: absolute !important;
+    top: 50% !important;        /* 先將頂端對齊到 50% */
+    right: 5% !important;
+    transform: translateY(-50%) !important; /* 關鍵：向上平移自身高度的一半 */
+    writing-mode: vertical-rl !important;
+    text-orientation: upright !important;
+    font-size: 5rem !important;
+    color: #333 !important;
+    z-index: 999 !important;
+    white-space: nowrap !important;
+}
+/* 雲的設定 - 直接定位，不再透過外層容器排版 */
+.floating-cloud {
+    position: fixed !important;
+    width: 350px !important; /* 放大兩倍 */
+    animation-name: floatAndScale !important;
+    animation-timing-function: ease-in-out !important;
+    animation-iteration-count: infinite !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+}
+
+/* 每朵雲設定不同的位置、動畫時間(速度)與延遲 */
+.floating-cloud:nth-child(1) { 
+    top: 5%; left: 5%; 
+    animation-duration: 10s; 
+    animation-delay: 0s; 
+}
+.floating-cloud:nth-child(2) { 
+    top: 10%; right: 10%; 
+    animation-duration: 14s; 
+    animation-delay: 2s; 
+}
+.floating-cloud:nth-child(3) { 
+    bottom: 10%; left: 15%; 
+    animation-duration: 12s; 
+    animation-delay: 4s; 
+}
+.floating-cloud:nth-child(4) { 
+    bottom: 5%; right: 5%; 
+    animation-duration: 16s; 
+    animation-delay: 6s; 
+}
+
+@keyframes floatAndScale {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
+    50% { transform: translateY(-50px) scale(1.2); opacity: 0.8; }
+}
+/* --- 空嚴寺章動畫設定 --- */
+.stamp-seal {
+    position: fixed !important;
+    bottom: 5% !important;
+    right: 5% !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: none !important;
+    
+    /* 在這裡強制限制圖片的最大顯示寬度 */
+    width: 150px !important; /* 你可以調整這個數值，例如 80px 或 120px */
+}
+
+/* 當 JS 觸發時加入這個 class，動畫就會開始 */
+.stamp-seal.animate-stamp {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    
+    /* 強制定位 */
+    position: fixed !important;
+    bottom: 5% !important;
+    right: 5% !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 99999 !important;
+    
+    /* 這裡加上 animation-fill-mode 和明確的動畫名稱 */
+    animation-name: stampDown !important;
+    animation-duration: 1.5s !important;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+    animation-fill-mode: forwards !important;
+}
+
+@keyframes stampDown {
+    0% {
+        opacity: 0 !important;
+        transform: scale(3) !important; /* 動畫開始時很大 */
+    }
+    100% {
+        opacity: 1 !important;
+        transform: scale(0.5) !important; /* 這邊的數字越小，蓋章就會越小 */
+    }
 }
