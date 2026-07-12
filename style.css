@@ -2,40 +2,41 @@
 * { font-family: 'MyCalligraphy', serif; box-sizing: border-box; }
 body { background: url('paper.jpg') center/cover fixed; margin: 0; height: 100vh; overflow: hidden; }
 
-/* 1. 開眼遮罩 */
+/* 遮罩 */
 #audio-unlocker { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 9999; }
 .eyelid { position: absolute; width: 100%; height: 50%; background: black; transition: 1s ease-in-out; }
-.top-eyelid { top: 0; } .bottom-eyelid { bottom: 0; }
 #audio-unlocker.unlocked .top-eyelid { top: -50%; }
 #audio-unlocker.unlocked .bottom-eyelid { bottom: -50%; }
-.unlock-prompt { position: absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-size:2rem; cursor:pointer; }
 
-/* 2. 背景與圖層 */
-.container { position: relative; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.logo { width: 75px; margin-bottom: 20px; z-index: 10; }
-.flower-bg { width: 300px; position: absolute; z-index: 5; opacity: 0.8; }
+/* 容器 */
+.container { position: relative; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; }
 
-/* 3. 順序動畫文字 */
-.date-side { position: absolute; top: -100px; font-size: 3rem; color: #4b0082; animation: drop 1s forwards 1.2s; }
-.left-date { left: 10%; } .right-date { right: 10%; }
-@keyframes drop { to { top: 15%; } }
+/* 彼岸花 (層級1) */
+.flower-bg { position: absolute; width: 300px; z-index: 1; pointer-events: none; }
 
-.typing, .typing-sub { overflow: hidden; white-space: nowrap; border-right: 4px solid #4b0082; animation: write 2s steps(20, end) forwards 2.5s; width: 0; color: #4b0082; font-weight: bold; }
+/* 主體文字 (層級2，永遠置中) */
+.main-title { position: relative; z-index: 2; text-align: center; }
+.typing, .typing-sub { 
+    overflow: hidden; white-space: nowrap; border-right: 4px solid #4b0082; 
+    animation: write 2.5s steps(30, end) forwards 1.5s; width: 0; 
+    color: #4b0082; font-weight: bold; margin: 0;
+}
 .typing { font-size: 5rem; } .typing-sub { font-size: 2.5rem; }
 @keyframes write { to { width: 100%; } }
 
-/* 4. 祥雲與印章 */
-.cloud2 { position: absolute; width: 300px; animation: float 3s infinite ease-in-out; }
+/* 直式日期：字幕式上到下動畫 (層級3) */
+.date-side { 
+    position: fixed; top: 15%; font-size: 3rem; color: #4b0082; 
+    writing-mode: vertical-rl; text-orientation: upright; z-index: 3;
+    /* 核心：從上方遮罩慢慢顯露 */
+    clip-path: inset(0 0 100% 0);
+    animation: revealSubtitles 2s forwards 1.2s;
+}
+.left-date { left: 10%; } .right-date { right: 10%; }
+@keyframes revealSubtitles { to { clip-path: inset(0 0 0 0); } }
+
+/* 其餘固定 */
+.logo { position: absolute; top: 10%; width: 75px; z-index: 2; }
+.cloud2 { position: absolute; width: 300px; animation: float 3s infinite ease-in-out; z-index: 0; }
 .c1 { top: 5%; left: 5%; } .c2 { top: 5%; right: 5%; } .c3 { bottom: 5%; left: 5%; } .c4 { bottom: 5%; right: 5%; }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-.stamp { position: absolute; bottom: 5%; right: 5%; width: 200px; opacity: 0; animation: stampAnim 1s 4s forwards; }
-@keyframes stampAnim { to { opacity: 1; transform: scale(1); } }
-
-/* 5. 爆誕特效 */
-#blast-text { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #7e22ce; font-size: 8rem; font-weight: 900; opacity: 0; z-index: 9998; pointer-events: none; }
-#blast-text.active { animation: blastFade 2s forwards; }
-@keyframes blastFade { 0% { opacity:0; transform:translate(-50%,-50%) scale(0.5); } 20% { opacity:1; transform:translate(-50%,-50%) scale(1.2); } 100% { opacity:0; } }
-
-/* 6. 火花粒子 */
-.fire-particle { position: fixed; background: purple; width: 12px; height: 12px; border-radius: 50%; z-index: 9997; animation: fire 1s forwards; }
-@keyframes fire { to { transform: translate(var(--vx), var(--vy)); opacity: 0; } }
+.stamp { position: absolute; bottom: 5%; right: 5%; width: 200px; z-index: 2; }
