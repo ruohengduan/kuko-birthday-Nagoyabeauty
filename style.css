@@ -1,40 +1,46 @@
 @font-face { font-family: 'MyCalligraphy'; src: url('衡山毛筆字體.ttf'); }
 * { font-family: 'MyCalligraphy', serif; box-sizing: border-box; }
 
-body { 
-    background: url('paper.jpg') center/cover fixed; 
-    margin: 0; min-height: 100vh; display: flex; 
-    justify-content: center; align-items: center; overflow-x: hidden;
+body { background: url('paper.jpg') center/cover fixed; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+
+.container { position: relative; text-align: center; color: #4b0082; }
+
+/* 蓮花 Logo 原尺寸 */
+.logo { width: auto; max-width: 150px; }
+
+/* 名字底下的光暈 */
+h1 { font-size: 4rem; text-shadow: 0 0 15px #d8b4fe, 0 0 25px #c084fc; margin: 10px 0; }
+
+/* 祥雲飄浮動畫 */
+.cloud2 { position: absolute; width: 100px; animation: float 3s infinite ease-in-out; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+.c1 { top: -50px; left: -100px; } .c2 { top: -20px; right: -80px; }
+.c3 { bottom: 50px; left: -50px; } .c4 { bottom: -20px; right: -50px; }
+
+/* 空嚴寺章動畫 (蓋上去) */
+.stamp { position: absolute; bottom: -50px; right: -50px; width: 120px; opacity: 0; animation: stampAnim 1s 1.5s forwards; }
+@keyframes stampAnim { to { opacity: 1; transform: scale(1); } }
+
+/* 爆誕紫色字體 + 自動消失 */
+#blast-text { 
+    position: fixed; color: #7e22ce; font-size: 5rem; opacity: 0; pointer-events: none;
+    transition: 0.5s; z-index: 2000;
+}
+#blast-text.active { animation: blastFade 2s forwards; }
+@keyframes blastFade { 
+    0% { opacity: 0; transform: scale(0.5); }
+    20% { opacity: 1; transform: scale(1.2); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1); } /* 閃完就消失 */
 }
 
-.container { text-align: center; color: #4b0082; }
-
-/* 響應式：手機版縮小祥雲 */
-@media (max-width: 600px) {
-    .logo { width: 100px; }
-    .cloud2 { width: 100px !important; } /* 強制四分之一 */
-    h1 { font-size: 2.5rem; }
-}
-
-/* 電腦版大小 */
-.logo { width: 200px; }
-.cloud2 { width: 400px; }
-h1 { font-size: 5rem; }
-
-/* --- 核心特效 --- */
-#audio-unlocker { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 999; }
-.eyelid { position: absolute; width: 100%; height: 50%; background: black; transition: 1s; }
-.top-eyelid { top: 0; }
-.bottom-eyelid { bottom: 0; }
-
-/* 當 JS 加上 'active' 時觸發開眼 */
+/* 開眼動畫 (保持不變) */
+.eyelid { position: fixed; width: 100%; height: 50%; background: black; transition: 1s; z-index: 999; }
 #audio-unlocker.active .top-eyelid { top: -50%; }
 #audio-unlocker.active .bottom-eyelid { bottom: -50%; }
 
-/* 當 JS 加上 'active' 時觸發爆誕文字 */
-#blast-text { position: fixed; color: red; font-size: 5rem; opacity: 0; transition: 1s; pointer-events: none; }
-#blast-text.active { opacity: 1; transform: scale(1.5); }
-
-/* 紫色火焰特效粒子 (確保 CSS 存在) */
-.fire-particle { position: fixed; background: purple; width: 10px; height: 10px; border-radius: 50%; animation: fireAnim 1s forwards; }
-@keyframes fireAnim { to { transform: translate(var(--vx), var(--vy)); opacity: 0; } }
+/* 手機版縮放 */
+@media (max-width: 600px) {
+    .cloud2 { width: 50px; } /* 手機縮為四分之一 */
+    h1 { font-size: 2rem; }
+}
