@@ -14,7 +14,7 @@ document.body.classList.add('preload');
 function triggerEyeOpening() {
     // 1. 觸發 CSS 眼皮黑幕掀開動畫
     if (unlocker) {
-        unlocker.classList.add('active');
+unlocker.classList.add('unlocked');
     }
 
     // 2. 觸發 CSS 爆誕文字動畫
